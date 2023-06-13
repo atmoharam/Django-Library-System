@@ -1,0 +1,223 @@
+<head>
+<style>
+     body{
+      background-color: #344a72;
+      font-family:"segoe ui light";
+      }
+      *
+      {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          list-style: none;
+          text-decoration: none;
+      }
+      .wrapper
+      {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%,-50%);
+          width: 550px;
+          display: flex;
+          box-shadow: 0 1px 20px 0 rgb(69,90,100,0.08);
+          background-color: white;
+      }
+      .info_data{
+          padding-left: 20px;
+          padding-bottom: 10px ;
+      }
+      nav
+        {
+            background-color: #0082e6;
+            height: 75px;
+            width: 100%;
+        }
+        nav ul
+        {
+            float: right;
+            margin-right: 20px;
+        }
+        nav ul li
+        {
+            display: inline-block;
+            line-height: 80px;
+            margin: 0 5px;
+        }
+        nav ul li a
+        {
+            color: white;
+            font-size: 17px;
+          text-transform: uppercase;
+          padding: 7px 13px;
+          border-radius: 3;
+        }
+        label.logo
+        {
+            color: white;
+            font-size: 35px;
+            line-height: 80px;
+            padding: 0 10px;
+            font-weight: bold;
+
+        }
+        a.active ,a:hover
+        {
+            background-color: #1b9bff;
+            transition: .5s;
+        }
+        .checkbtn
+        {
+            font-size: 30px;
+            color: white;
+            float: right;
+            line-height: 80px;
+            margin-right:40px ;
+            cursor: pointer;
+            display: none;
+
+        }
+        #check
+        {
+            display: none;
+        }
+        @media(max-width:952px)
+        {
+            label.logo
+            {
+                font-size: 30px;
+                padding-left: 50px;
+            }
+            nav ul li a
+            {
+                font-size: 16px;
+            }
+        }
+        @media(max-width:858px)
+        {
+            .checkbtn
+            {
+                display: block;
+
+            }
+            ul
+            {
+                position: fixed;
+                width: 100%;
+                height: 100vh;
+                background-color: #2c3e50;
+                top: 80px;
+                left: -100%;
+                text-align: center;
+                transition: all .5s;
+            }
+            nav ul li{
+                display: block;
+                margin: 50px 0;
+                line-height: 30px;
+            }
+            nav ul li {
+                font-size: 20px;
+            }
+            a:hover,a.active{
+                background-color: none;
+                color: #0082e6;
+            }
+            #check:checked ~ul{
+                left: 0;
+            }
+        }
+        .bn49 {
+  border: 0;
+  text-align: center;
+  display: inline-block;
+  padding: 14px;
+  width: 150px;
+  margin: 7px;
+  color: #ffffff;
+  background-color: #36a2eb;
+  border-radius: 8px;
+  font-family: "proxima-nova-soft", sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  transition: box-shadow 200ms ease-out;
+}
+</style>
+
+ <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <nav >
+        <input type="checkbox" id="check"> 
+        <label for="check" class="checkbtn">
+            <i class="fas fa-bars"></i>
+        </label>
+        <label class="logo">Library System</label>
+        <ul>
+            <li>
+                <a href="{%url 'Home' %}">Home</a>
+            </li>
+            <li> 
+                <a href="{%url 'accounts:profile' %}">Back To Profile</a>
+            </li> 
+            {%if user.first_name == "admin" %}
+           <li>
+            <a href="{%url 'add_Book' %}">add</a>
+           </li> 
+            {%endif%}
+            <li>
+                <a href="{%url 'logout' %}" > Logout</a>
+            </li> 
+           
+           
+        </ul>
+    </nav>
+    <div class="wrapper">
+        <div class="info_data">
+            <h3>Information</h3>
+            <div class="data">
+                <h1>Book Name</h1>
+                <h4>{{book.Name}}</h4>
+            </div>
+            <div class="data">
+                <h1>Book Author</h1>
+                <h4>{{book.author}}</h4>
+            </div>
+            <div class="data">
+                <h1>Book ISBN</h1>
+                <h4>{{book.ISBN}}</h4>
+            </div>
+            <div class="data">
+                <h1>Book publication year </h1>
+                <h4>{{book.Publish_year}}</h4>
+            </div>
+            <div class="data">
+                <form action="{% url 'op' %}" method="POST">
+                    {%csrf_token%}
+                    <input type="hidden" name="name" value="{{book.Name}}">
+                    <input type="hidden" name="userr" value="{{user.username}}">
+                    {% if book.availabilty %}
+                    <button type="submit" name="op" value="borrowing" class="bn49"> Borrowing</button>
+                    <button type="submit" name="op" value="extending  period" class="bn49"> Extending  Period</button>
+                    
+                    {% endif %}
+                    
+                    <button type="submit" name="op" value="returning" class="bn49"> Returning</button>
+            
+            
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</body>
+    {% else %}
+      <p>Please login to see this page.</p>
+     <a href="{%url 'login' %}">Login</a>
+    {% endif %}
+  
+
+
+

@@ -1,0 +1,228 @@
+<head>
+    <style>
+        *{
+        padding: 0;
+        margin: 0;
+        text-decoration: none;
+        list-style: none;
+        box-sizing:border-box;
+
+        }
+      body{
+      background-color: #344a72;
+      font-family:"segoe ui light";
+      }
+      .add-box  {
+        width: 360px;
+        height: 450px;
+        margin: auto;
+        margin-top: 20px;
+        background-color: white;
+      }
+      h1
+      {
+        text-align: center;
+        padding-top:15px ;
+      }
+      h4
+      {
+        text-align: center;
+      
+      }
+      table
+      {
+        width: 300px;
+        margin-left: 20px;
+      }
+      form tr
+      {
+        width: 100%;
+        padding:7px;
+        border:none;
+        border: 1px solid gray;
+        border-radius: 6px;
+        outline: none;
+        margin-top: 20px;
+        font-size: 18px;
+      }
+        
+      .sp
+      {
+        margin-top: 10px;
+        margin-bottom: 7px;
+        width: 100%;
+        height: 35px;
+        border:none;
+        background-color: #49c1a2;
+        color: white;
+        font-size: 18px;
+      }
+      nav
+        {
+            background-color: #0082e6;
+            height: 75px;
+            width: 100%;
+        }
+        nav ul
+        {
+            float: right;
+            margin-right: 20px;
+        }
+        nav ul li
+        {
+            display: inline-block;
+            line-height: 80px;
+            margin: 0 5px;
+        }
+        nav ul li a
+        {
+            color: white;
+            font-size: 17px;
+          text-transform: uppercase;
+          padding: 7px 13px;
+          border-radius: 3;
+        }
+        label.logo
+        {
+            color: white;
+            font-size: 35px;
+            line-height: 80px;
+            padding: 0 10px;
+            font-weight: bold;
+
+        }
+        a.active ,a:hover
+        {
+            background-color: #1b9bff;
+            transition: .5s;
+        }
+        .checkbtn
+        {
+            font-size: 30px;
+            color: white;
+            float: right;
+            line-height: 80px;
+            margin-right:40px ;
+            cursor: pointer;
+            display: none;
+
+        }
+        #check
+        {
+            display: none;
+        }
+        @media(max-width:952px)
+        {
+            label.logo
+            {
+                font-size: 30px;
+                padding-left: 50px;
+            }
+            nav ul li a
+            {
+                font-size: 16px;
+            }
+        }
+        @media(max-width:858px)
+        {
+            .checkbtn
+            {
+                display: block;
+
+            }
+            ul
+            {
+                position: fixed;
+                width: 100%;
+                height: 100vh;
+                background-color: #2c3e50;
+                top: 80px;
+                left: -100%;
+                text-align: center;
+                transition: all .5s;
+            }
+            nav ul li{
+                display: block;
+                margin: 50px 0;
+                line-height: 30px;
+            }
+            nav ul li {
+                font-size: 20px;
+            }
+            a:hover,a.active{
+                background-color: none;
+                color: #0082e6;
+            }
+            #check:checked ~ul{
+                left: 0;
+            }
+        }
+        
+        </style>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  </head>
+  {% if user.is_authenticated %}
+  <nav >
+    <input type="checkbox" id="check"> 
+    <label for="check" class="checkbtn">
+        <i class="fas fa-bars"></i>
+    </label>
+    <label class="logo">Library System</label>
+    <ul>
+        <li >   <a href="{%url 'Home' %}" > Home</a> </li>
+        <li> 
+          <a href="{%url 'accounts:profile' %}">Back To Profile</a>
+        </li> 
+        {%if user.first_name == "admin" %}
+       <li>
+        <a href="{%url 'add_Book' %}">add</a>
+       </li> 
+        {%endif%}
+        <li>
+            <a href="{%url 'logout' %}" > Logout</a>
+        </li> 
+       
+    </ul>
+</nav>
+<div class="add-box">
+
+    <form  method="POST">
+        {% csrf_token %}
+        
+        <table>
+          <h1>Add Book</h1>
+            <tr>
+                <td>{{ form.Name.label_tag }}</td>
+                <td>{{ form.Name }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.author.label_tag }}</td>
+                <td>{{ form.author}}</td>
+            </tr>
+            <tr>
+                <td>{{ form.category.label_tag }}</td>
+                <td>{{ form.category }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.ISBN.label_tag }}</td>
+                <td>{{ form.ISBN }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.Publish_year.label_tag }}</td>
+                <td>{{ form.Publish_year }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.availabilty.label_tag }}</td>
+                <td>{{ form.availabilty }}</td>
+            </tr>
+        </table>
+        <button class="sp">Add</button>
+        </form>
+        <input type="submit"  class="sp" value="Home" onClick=location.href="{%url 'Home' %}" />
+</div>
+{% else %}
+  <p>Please login to see this page.</p>
+ <a href="{%url 'login' %}">Login</a>
+{% endif %}
+ 
